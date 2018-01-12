@@ -231,6 +231,12 @@ __fz_zsh_completion() {
   fi
 
   if [[ -n "$selected" ]]; then
+    local accept=0
+    if [[ "$selected" == 'enter'* ]]; then
+      accept=1
+    fi
+    selected=$(echo $selected | tail -1)
+
     if [[ "$FZ_ABBREVIATE_HOME" == "1" ]]; then
       selected=${selected/#\~/$HOME}
     fi
@@ -242,6 +248,7 @@ __fz_zsh_completion() {
       selected=${selected/#$HOME/\~}
     fi
     LBUFFER="$cmd $selected"
+    [[ $accept = 1 ]] && zle accept-line
   fi
 
   type _zsh_autosuggest_clear >/dev/null && _zsh_autosuggest_clear
